@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const isURL = require('validator/es/lib/isURL');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema(
   {
@@ -22,21 +22,21 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
       validate: {
-        validator: isURL,
+        validator: (url) => validator.isURL(url),
       },
       required: true,
     },
     trailerLink: {
       type: String,
       validate: {
-        validator: isURL,
+        validator: (url) => validator.isURL(url),
       },
       required: true,
     },
     thumbnail: {
       type: String,
       validate: {
-        validator: isURL,
+        validator: (url) => validator.isURL(url),
       },
       required: true,
     },
