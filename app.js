@@ -2,12 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { errors, celebrate, Joi } = require('celebrate');
-const auth = require('./middlewares/auth');
+const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const serverError = require('./middlewares/serverErr');
-const { createUser, login } = require('./controllers/usersControllers');
-const NotFoundError = require('./utils/errors/NotFoundErr');
+const router = require('./routes/index');
 
 require('dotenv').config();
 
@@ -19,42 +17,14 @@ mongoose.connect('mongodb://127.0.0.1/bitfilmsdb', {
 
 const app = express();
 
+app.use(requestLogger);
+
 app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(requestLogger);
-
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string()
-      .min(2)
-      .max(30),
-    email: Joi.string()
-      .email()
-      .required(),
-    password: Joi.string()
-      .required(),
-  }),
-}), createUser);
-
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string()
-      .required()
-      .email(),
-    password: Joi.string()
-      .required(),
-  }),
-}), login);
-
-app.use('/users', auth, require('./routes/usersRoutes'));
-app.use('/movies', auth, require('./routes/moviesRoutes'));
-
-app.use('/*', auth, () => {
-  throw new NotFoundError('Страницы не существует');
-});
+app.use(router);
 
 app.use(errorLogger);
 
