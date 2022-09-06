@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const { auth } = require('../middlewares/auth');
-const { login, createUser} = require('../controllers/usersControllers');
-const {celebrate, Joi} = require('celebrate');
+const { celebrate, Joi } = require('celebrate');
+const { login, createUser } = require('../controllers/usersControllers');
+const auth = require('../middlewares/auth');
 const NotFoundError = require('../utils/errors/NotFoundErr');
 
 router.post('/signup', celebrate({
@@ -27,8 +27,8 @@ router.post('/signin', celebrate({
   }),
 }), login);
 
-router.use('/users', auth, require('../routes/usersRoutes'));
-router.use('/movies', auth, require('../routes/moviesRoutes'));
+router.use('/users', auth, require('./usersRoutes'));
+router.use('/movies', auth, require('./moviesRoutes'));
 
 router.use('/*', auth, () => {
   throw new NotFoundError('Страницы не существует');

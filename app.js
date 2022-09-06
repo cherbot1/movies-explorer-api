@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const cors = require('cors');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -18,6 +19,8 @@ mongoose.connect('mongodb://127.0.0.1/bitfilmsdb', {
 const app = express();
 
 app.use(requestLogger);
+
+app.use(helmet());
 
 app.use(cors());
 
