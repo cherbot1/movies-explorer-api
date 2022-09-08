@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    description: {
+      type: String,
+      required: true,
+    },
     image: {
       type: String,
       validate: {
@@ -49,11 +53,11 @@ const userSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    nameRu: {
+    nameRU: {
       type: String,
       required: true,
     },
-    nameEn: {
+    nameEN: {
       type: String,
       required: true,
     },

@@ -16,8 +16,25 @@ module.exports.getMovies = (req, res, next) => {
 /* Добавление фильма */
 module.exports.createMovie = (req, res, next) => {
   const owner = req.user._id;
+  const {
+    country, director, duration, year, description,
+    image, trailerLink, thumbnail, movieId, nameRU, nameEN,
+  } = req.body;
 
-  Movie.create({ owner, ...req.body })
+  Movie.create({
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    thumbnail,
+    owner,
+    movieId,
+    nameRU,
+    nameEN,
+  })
     .then((movie) => {
       res.send({ data: movie });
     })
@@ -32,9 +49,9 @@ module.exports.createMovie = (req, res, next) => {
 
 /* Удаление фильма */
 module.exports.deleteMovie = (req, res, next) => {
-  const { movieId } = req.params;
+  const { _id } = req.params;
 
-  Movie.findById(movieId)
+  Movie.findById(_id)
     .orFail(() => {
       throw new NotFoundError('Фильма не существует');
     })
@@ -42,7 +59,7 @@ module.exports.deleteMovie = (req, res, next) => {
       if (req.user._id !== movie.owner._id.valueOf()) {
         return next(new ForbiddenError('Фильм загружен не Вами, удалить невозможно'));
       }
-      return Movie.deleteOne(movieId)
+      return Movie.deleteOne(_id)
         .then(() => {
           res.send({ data: movie });
         })

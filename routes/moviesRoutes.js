@@ -8,7 +8,11 @@ const urlValidation = Joi.string()
 
 router.get('/', getMovies);
 
-router.delete('/_id', deleteMovie);
+router.delete('/:_id', celebrate({
+  params: Joi.object().keys({
+    _id: Joi.string().length(24).hex().required(),
+  }),
+}), deleteMovie);
 
 router.post('/', celebrate({
   body: Joi.object().keys({
@@ -16,10 +20,10 @@ router.post('/', celebrate({
     director: Joi.string().required(),
     duration: Joi.number().required(),
     year: Joi.string().required(),
+    description: Joi.string().required(),
     image: urlValidation,
     trailerLink: urlValidation,
     thumbnail: urlValidation,
-    owner: Joi.string().hex().length(24),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),

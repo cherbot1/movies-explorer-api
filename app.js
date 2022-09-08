@@ -6,13 +6,16 @@ const cors = require('cors');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const serverError = require('./middlewares/serverErr');
+const { DEV_DB_CONN } = require('./utils/config');
 const router = require('./routes/index');
+
+const { NODE_ENV, DB_CONN } = process.env;
 
 require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
 
-mongoose.connect('mongodb://127.0.0.1/bitfilmsdb', {
+mongoose.connect(NODE_ENV === 'production' ? DB_CONN : DEV_DB_CONN, {
   useNewUrlParser: true,
 });
 

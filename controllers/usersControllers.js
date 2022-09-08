@@ -92,6 +92,10 @@ module.exports.updateUser = (req, res, next) => {
         next(new BadRequestError('Некорректный запрос'));
         return;
       }
+      if (err.code === 11000) {
+        next(new ConflictError('Пользователь уже существует'));
+        return;
+      }
       next(err);
     });
 };
