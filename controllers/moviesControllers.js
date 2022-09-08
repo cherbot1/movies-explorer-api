@@ -59,9 +59,9 @@ module.exports.deleteMovie = (req, res, next) => {
       if (req.user._id !== movie.owner._id.valueOf()) {
         return next(new ForbiddenError('Фильм загружен не Вами, удалить невозможно'));
       }
-      return Movie.deleteOne(_id)
-        .then(() => {
-          res.send({ data: movie });
+      return Movie.findByIdAndRemove(_id)
+        .then((deletedMovie) => {
+          res.send({ data: deletedMovie });
         })
         .catch(next);
     })
