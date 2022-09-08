@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -11,13 +12,11 @@ const router = require('./routes/index');
 
 const { NODE_ENV, DB_CONN } = process.env;
 
-require('dotenv').config();
-
-const { PORT = 3000 } = process.env;
-
 mongoose.connect(NODE_ENV === 'production' ? DB_CONN : DEV_DB_CONN, {
   useNewUrlParser: true,
 });
+
+const { PORT = 3000 } = process.env;
 
 const app = express();
 
